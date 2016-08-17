@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.5.0.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "<your api key>",
+    authDomain: "<your application>.firebaseapp.com",
+    databaseURL: "<your application>.firebaseio.com",
+    storageBucket: "<your application>.appspot.com",
+  };
+  firebase.initializeApp(config);
+
+  // Initialize AWS// With hard coded credentials //DO NOT USE THIS FOR PRODUCTION
+  // Article about Browser Configuration: http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/browser-configuring.html
+  // For usage with AWS Cognito see tutorial: https://github.com/emmanuelmillionaer/aws-cognito-js-login
+  AWS.config.update({ region: 'eu-west-1',
+                      accessKeyId: '<your access key Id>',
+                      secretAccessKey: '<your secret access key>' });
+
+</script>
+<script type="text/javascript">
+
+function initFirebase(token){
+    firebase.auth().signInWithCustomToken(token).catch(function(error) {
+        alert(error.code);
+        alert(error.message);
+    });
+
+    // example code writing to a firebase database
+    firebase.database().ref('users').push({
+        username: "emmanuel",
+        message: "Hi There!"
+    });
+};
+
+function letLambdaGenerateFirebaseToken(){
+    var lambda = new AWS.Lambda({apiVersion: '2015-03-31'});
+
+    // call lambda function that generate a firebase token for your aws-user
+    lambda.invoke({FunctionName: 'createFirebaseToken'}, function(err, data) {
+      if (err) alert(err, err.stack); // an error occurred
+      else  initFirebase(data.Payload.slice(1,-1)); // successful response
+    });
+};
+
+letLambdaGenerateFirebaseToken();
+
+</script>
+</head>
+<body>
+
+<h1>Demonstrating how to use AWS Cognito as Authentication Strategy for Firebase</h1>
+
+</body>
+</html>
