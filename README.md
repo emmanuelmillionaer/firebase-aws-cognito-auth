@@ -12,6 +12,8 @@ Authenticate with AWS Cognito and AWS Lambda Firebase Users
 
 4. With the recieved Token the User authenticates Firebase
 
+<img src="https://static.swimlanes.io/f895a007f1e9e12044561e89d0813fae.png"/>
+
 ## How to get started
 
 Got to the [Firebase Console](https://console.firebase.google.com/) and create a new Firebase App.
